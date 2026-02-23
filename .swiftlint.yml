@@ -1,0 +1,23 @@
+# SwiftLint configuration file
+disabled_rules: # rules to disable
+  - line_length
+  - trailing_whitespace
+  - identifier_name
+  - todo
+
+opt_in_rules: # additional rules you want enabled
+  - force_unwrapping
+  - redundant_optional_initialization
+  - empty_count
+  - empty_enum_arguments
+  - private_action
+  - unused_optional_binding
+
+included: # paths to include
+  - ecall
+excluded: # paths to ignore
+  - Pods
+  - ecallTests
+  - ecallUITests
+
+reporter: "json" # output format
