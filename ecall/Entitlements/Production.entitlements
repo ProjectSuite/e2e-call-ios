@@ -10,7 +10,7 @@
 	</array>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:your_url</string>
+		<string>applinks:app.ecall.org</string>
 	</array>
 </dict>
 </plist>
