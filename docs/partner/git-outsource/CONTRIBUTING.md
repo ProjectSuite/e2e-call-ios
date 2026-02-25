@@ -11,7 +11,7 @@ Please read and follow our [Code of Conduct](CODE_OF_CONDUCT.md). By participati
 ### Reporting Bugs
 
 Before reporting a bug:
-1. Check if the issue already exists in [GitHub Issues](https://github.com/your-org/ecall-ios/issues)
+1. Check if the issue already exists in [GitHub Issues](https://github.com/ProjectSuite/e2e-call-ios/issues)
 2. Search closed issues to see if it was already fixed
 
 When reporting a bug:
@@ -255,8 +255,8 @@ If you're contributing as a partner:
 ### Questions?
 
 - Check [documentation](docs/)
-- Search [GitHub Issues](https://github.com/your-org/ecall-ios/issues)
-- Ask in [GitHub Discussions](https://github.com/your-org/ecall-ios/discussions)
+- Search [GitHub Issues](https://github.com/ProjectSuite/e2e-call-ios/issues)
+- Ask in [GitHub Discussions](https://github.com/ProjectSuite/e2e-call-ios/discussions)
 - Contact maintainers (for sensitive questions)
 
 ### Stuck?

@@ -243,8 +243,7 @@ This step collects all credentials required for iOS integration, including ECall
 > - API ID and API Hash are sensitive credentials
 > - Do NOT commit them to GitHub
 > - Do NOT hardcode them in source code
-> - Store them only in:
->   - Xcode Build Settings (User-Defined)
+> - Store them only in `Config.local.xcconfig` (gitignored)
 
 ---
 
@@ -370,31 +369,48 @@ The backend returns app configuration flags, and the client UI adapts automatica
 
 This step configures the iOS source code to use the credentials prepared above.
 
-### 4.1 Configure API Credentials in Xcode
+### 4.1 Configure API Credentials via Config.local.xcconfig
+
+The project uses `.xcconfig` files to manage sensitive credentials locally without committing them to Git.
 
 #### Action
 
-1. Open the iOS project in Xcode
+1. In the project root, copy the example file:
+   ```bash
+   cp Config.local.example.xcconfig Config.local.xcconfig
+   ```
 
-2. Select **Project → Target**
+2. Open `Config.local.xcconfig` and fill in your real values:
+   ```xcconfig
+   SLASH = /
 
-3. Go to **Build Settings**
+   APP_API_ID = your_api_id_from_dashboard
+   APP_API_HASH = your_api_hash_from_dashboard
+   BASE_DOMAIN = your_app.org
+   BUNDLE_URL_SCHEME = your_bundle_url_scheme
+   GOOGLE_CLIENT_ID = your_google_client_id.apps.googleusercontent.com
+   GOOGLE_URL_SCHEME = com.googleusercontent.apps.your_google_client_id
+   SHARE_URL = https:$(SLASH)/your_app_url
+   ```
 
-4. Scroll to **User-Defined**
+3. Open `ecall.xcworkspace` in Xcode
 
-5. Add the following keys:
-   - `APP_API_ID`
-   - `APP_API_HASH`
+4. Verify: Go to **Build Settings → Levels** view to confirm values from Config File column are resolved correctly
 
-6. Set value for **Production** configuration
+> ⚠️ **URL Note**
+> In `.xcconfig` files, `//` is treated as a comment.
+> For URLs, always use: `https:$(SLASH)/domain.com/path`
 
 #### Expected Result
 
-- API credentials are injected at build time
+- API credentials are injected at build time via xcconfig
 - App can authenticate with ECall backend
+- `Config.local.xcconfig` does NOT appear in `git status` (gitignored)
 
 > 🔒 **Security Notice**
-> Never hardcode credentials in source files.
+> - Never hardcode credentials in source files
+> - `Config.local.xcconfig` is already in `.gitignore`
+> - Each developer must create their own copy from the example file
 
 > ⚠️ **Do NOT modify the following:**
 > - API base URLs
@@ -435,7 +451,7 @@ This step configures the iOS source code to use the credentials prepared above.
 | Partner account created | ☐ |
 | Apple certificates created (Push, VoIP, Sign in with Apple) | ☐ |
 | `.p8`, `.p12` uploaded to dashboard | ☐ |
-| API credentials configured in Xcode | ☐ |
+| API credentials configured in `Config.local.xcconfig` | ☐ |
 | SMTP & Twilio configuration | ☐ |
 | Bundle ID matches everywhere | ☐ |
 | Push & VoIP tested on real device | ☐ |

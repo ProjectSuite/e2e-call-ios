@@ -41,6 +41,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - API documentation
 - User flow documentation
 
-[Unreleased]: https://github.com/your-org/ecall-ios/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/your-org/ecall-ios/releases/tag/v1.0.0
+[Unreleased]: https://github.com/ProjectSuite/e2e-call-ios/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/ProjectSuite/e2e-call-ios/releases/tag/v1.0.0
 
