@@ -1,0 +1,15 @@
+// Config.local.example.xcconfig
+// Clone this file and rename Config.local.xcconfig and fill in your real values.
+// Config.local.xcconfig is gitignored and will not be committed.
+// ⚠️ NOTE: In xcconfig, // is treated as a comment.
+//    For URLs, use: https:$(SLASH)/domain.com/path
+
+SLASH = /
+
+APP_API_ID = your_real_api_id
+APP_API_HASH = your_real_api_hash
+BASE_DOMAIN = your_app.org
+BUNDLE_URL_SCHEME = your_bundle_url_scheme
+GOOGLE_CLIENT_ID = your_google_client_id.apps.googleusercontent.com
+GOOGLE_URL_SCHEME = com.googleusercontent.apps.your_google_client_id
+SHARE_URL = https:$(SLASH)/your_app_url
