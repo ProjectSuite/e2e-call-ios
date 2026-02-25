@@ -34,7 +34,7 @@ struct AuthFlowMainView: View {
                         Image("Logo")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 80, height: 80)
+                            .frame(width: 100, height: 100)
                             .cornerRadius(8)
 
                         Text(KeyLocalized.app_title)

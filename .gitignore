@@ -1,3 +1,7 @@
+# Config
+Config.local.xcconfig
+Config.staging.local.xcconfig
+
 # Xcode
 build/
 *.xcworkspace
