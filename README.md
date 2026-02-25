@@ -1,6 +1,6 @@
 # ECall iOS
 
-End-to-end encrypted (E2EE) video/audio calling application for iOS.
+End-to-end encrypted (E2EE) video & audio calling — open source.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![iOS](https://img.shields.io/badge/iOS-16.6%2B-blue.svg)](https://developer.apple.com/ios/)
@@ -8,185 +8,151 @@ End-to-end encrypted (E2EE) video/audio calling application for iOS.
 
 ## Features
 
-- 🔒 **End-to-End Encryption**: RSA-2048 key exchange + AES-256-GCM media encryption
-- 📞 **Video & Audio Calls**: High-quality calls powered by WebRTC
-- 👥 **Group Calls**: Support for multiple participants
-- 🔐 **Multiple Auth Methods**: Email, Phone, Google Sign-in, Sign in with Apple
-- 🌍 **Multi-language**: Support for 15+ languages
-- 🔄 **Rejoin Calls**: Reconnect to active calls after disconnection
-- 📱 **Native Integration**: CallKit integration for seamless iOS experience
-- 🎨 **White-Label Ready**: Customizable branding for partners/resellers
+- 🔒 **End-to-End Encryption** — RSA-2048 key exchange + AES-256-GCM media encryption
+- 📞 **Video & Audio Calls** — High-quality calls powered by WebRTC
+- 👥 **Group Calls** — Multiple participants with E2EE
+- 🔐 **Multiple Auth** — Email, Phone, Google Sign-in, Sign in with Apple
+- 🌍 **Multi-language** — 15+ languages
+- 📱 **CallKit** — Native iOS call UI integration
+- 🎨 **White-Label** — Full branding customization for partners
 
 ## Requirements
 
-- **iOS**: 16.6 or later
-- **Xcode**: 14.0 or later
-- **CocoaPods**: For dependency management
-- **Apple Developer Account**: Required for distribution (development/testing can use free account)
+- **iOS** 16.6+
+- **Xcode** 16.2+
+- **macOS** 14.0+ (Sonoma)
+- **CocoaPods** for dependency management
 
 ## Quick Start
 
-### 1. Clone the Repository
-
 ```bash
-git clone https://github.com/your-org/ecall-ios.git
-cd ecall-ios
-```
+# 1. Clone
+git clone https://github.com/ProjectSuite/e2e-call-ios.git
+cd e2e-call-ios
 
-### 2. Install Dependencies
-
-```bash
-# Install CocoaPods if not already installed
-sudo gem install cocoapods
-
-# Install dependencies
+# 2. Install dependencies
 pod install
-```
 
-### 3. Open Workspace
+# 3. Configure credentials
+cp Config.local.example.xcconfig Config.local.xcconfig
+# Edit Config.local.xcconfig with your API credentials
 
-```bash
-# Always open .xcworkspace, not .xcodeproj
+# 4. Open in Xcode (always .xcworkspace, NOT .xcodeproj)
 open ecall.xcworkspace
 ```
 
-### 4. Configure API Credentials
-
-For partners/resellers, configure your API credentials:
-
-1. Create `Config.plist` from template (see [Configuration](#configuration))
-2. Add your `APP_API_ID` and `APP_API_HASH`
-3. Or use build settings (see [Partner Build Guide](docs/technical/partner-build-guide.md))
-
-### 5. Build and Run
-
-1. Select your target device or simulator
-2. Press `⌘ + R` or click **Run**
-3. App will build and launch
+> ⚠️ **Never commit `Config.local.xcconfig`** — it's gitignored and contains your private API credentials.
 
 ## Configuration
 
-### For Partners/Resellers
+### Config.local.xcconfig
 
-If you're a partner with API credentials:
+All partner-specific credentials are managed via `Config.local.xcconfig`:
 
-1. Copy the example config:
-   ```bash
-   cp Config.example.plist Config.plist
-   ```
+```xcconfig
+SLASH = /
 
-2. Edit `Config.plist` with your credentials:
-   - `APP_API_ID`: Your partner API ID
-   - `APP_API_HASH`: Your partner API hash
+APP_API_ID = your_api_id
+APP_API_HASH = your_api_hash
+BASE_DOMAIN = your_app.org
+BUNDLE_URL_SCHEME = your_bundle_url_scheme
+GOOGLE_CLIENT_ID = your_google_client_id.apps.googleusercontent.com
+GOOGLE_URL_SCHEME = com.googleusercontent.apps.your_google_client_id
+SHARE_URL = https:$(SLASH)/your_app_url
+```
 
-3. **Never commit** `Config.plist` to version control!
+> **URL Note**: `//` is a comment in xcconfig. Use `https:$(SLASH)/domain.com` instead.
 
-See [Partner Setup Guide](docs/business/partner-setup.md) for complete setup instructions.
+Values are injected into Build Settings via the xcconfig include chain:
+```
+Config/[Env].xcconfig → Pods xcconfig + Config.local.xcconfig
+```
 
-### For Developers
+### What Partners Can Customize
 
-For development/testing, you can:
-- Use mock/test credentials
-- Set up local backend server
-- Use development environment endpoints
+| Customizable | Not Customizable |
+|-------------|------------------|
+| App name & icon | API endpoints |
+| Bundle ID | WebSocket / Janus URLs |
+| API credentials | E2EE encryption logic |
+| Google / Apple sign-in | Call signaling flow |
+| Share URL & domain | Certificate pinning |
+| Branding & localization | Background modes |
 
-## Documentation
-
-### For Developers
-
-- **[Architecture Overview](docs/technical/architecture.md)** - System architecture and design
-- **[Core Modules](docs/technical/core-modules.md)** - Security, Networking, Persistence modules
-- **[Call Module](docs/technical/call-module.md)** - WebRTC and E2EE implementation
-- **[Authentication Flow](docs/technical/authentication-flow.md)** - Auth implementation details
-
-### For Partners/Resellers
-
-- **[Partner Setup Guide](docs/business/partner-setup.md)** - Business guide for partners
-- **[Partner Build Guide](docs/technical/partner-build-guide.md)** - Technical build instructions
-- **[Business Requirements](docs/business/business-requirements.md)** - Feature requirements
-- **[User Flows](docs/business/user-flows.md)** - Application user flows
-
-### Contributing
-
-- **[Contributing Guidelines](CONTRIBUTING.md)** - How to contribute to the project
-- **[Code of Conduct](CODE_OF_CONDUCT.md)** - Community guidelines
-- **[Security Policy](SECURITY.md)** - Security reporting guidelines
+See [Partner Technical Reference](docs/partner/partner-technical.md) for full details.
 
 ## Architecture
-
-ECall iOS follows a modular architecture:
 
 ```
 App Layer (SwiftUI)
     ↓
-Modules Layer (Authentication, Call, Contacts, Settings)
+Modules (Auth, Call, Contacts, Settings)
     ↓
-Core Layer (Security, Networking, Persistence, Language)
+Core (Security, Networking, Persistence, Language)
 ```
 
 ### Key Technologies
 
-- **SwiftUI**: Modern declarative UI framework
-- **WebRTC**: Real-time communication
-- **CallKit**: Native iOS call integration
-- **Swift 6**: Latest Swift concurrency features
-- **CocoaPods**: Dependency management
+| Technology | Purpose |
+|-----------|---------|
+| **SwiftUI** | Declarative UI |
+| **WebRTC** | Real-time communication |
+| **CallKit** | Native iOS call integration |
+| **Swift 6** | Modern concurrency (`async/await`) |
+| **CocoaPods** | Dependency management |
 
 ## Security
 
-- **E2EE**: All media is encrypted end-to-end
-- **Key Management**: RSA-2048 keys stored securely in Keychain
-- **No Server Access**: Server cannot decrypt media data
-- **Secure Storage**: Private keys never leave the device
+- **E2EE**: All media encrypted end-to-end
+- **Key Exchange**: P-256 ECDH (Secure Enclave) / RSA-2048 fallback
+- **Media Encryption**: AES-256-GCM
+- **Key Storage**: iOS Keychain (Secure Enclave-backed)
+- **Zero Server Access**: Server cannot decrypt media
+- **Certificate Pinning**: Enforced in Staging/Production
 
-See [Security Policy](SECURITY.md) for reporting vulnerabilities.
+## Documentation
+
+### For Partners
+
+- [**Partner Onboarding Guide**](docs/partner/partner-onboarding.md) — Step-by-step from registration to deployment
+- [**Partner Technical Reference**](docs/partner/partner-technical.md) — Xcode config, branding, troubleshooting
+
+### Open Source Community
+
+- [**Contributing**](docs/partner/git-outsource/CONTRIBUTING.md) — How to contribute
+- [**Code of Conduct**](docs/partner/git-outsource/CODE_OF_CONDUCT.md) — Community guidelines
+- [**Security Policy**](docs/partner/git-outsource/SECURITY.md) — Reporting vulnerabilities
+- [**Changelog**](docs/partner/git-outsource/CHANGELOG.md) — Version history
 
 ## Contributing
 
-We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for:
+We welcome contributions! Please read [CONTRIBUTING.md](docs/partner/git-outsource/CONTRIBUTING.md) before submitting a PR.
 
-- Code of conduct
-- Development setup
-- Pull request process
-- Code style guidelines
-- Testing requirements
+```bash
+# Fork → Clone → Branch → Code → Test → PR
+git checkout -b feature/your-feature
+# Make changes...
+git commit -m "feat: description"
+git push origin feature/your-feature
+```
+
+### Rules
+
+1. **Never commit credentials** — use `Config.local.xcconfig`
+2. **Do NOT modify** E2EE, SSL pinning, or signaling logic
+3. **Test on real device** — Push/VoIP requires physical device
+4. **Follow Swift conventions** — Swift 6 concurrency, `@MainActor`
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License — see [LICENSE](docs/partner/git-outsource/LICENSE).
 
 ## Support
 
-### For Users
-- **Documentation**: See [docs/](docs/) directory
-- **Issues**: Report bugs via [GitHub Issues](https://github.com/your-org/ecall-ios/issues)
-
-### For Partners
-- **Partner Portal**: Access your partner dashboard
-- **Email**: partners@ecall.example.com
-- **Documentation**: [Partner Setup Guide](docs/business/partner-setup.md)
-
-### For Contributors
-- **Discussions**: Join [GitHub Discussions](https://github.com/your-org/ecall-ios/discussions)
-- **Contributing**: See [CONTRIBUTING.md](CONTRIBUTING.md)
-
-## Acknowledgments
-
-- WebRTC community
-- All contributors and partners
-- Open source libraries and tools
-
-## Roadmap
-
-- [ ] Screen sharing support
-- [ ] Call recording (with consent)
-- [ ] Enhanced multi-device support
-- [ ] Performance optimizations
-- [ ] Additional language support
-
-See [GitHub Issues](https://github.com/your-org/ecall-ios/issues) for current development priorities.
+- **Email**: support@airfeedkh.com
+- **Portal**: https://ecall.org/
+- **Docs**: https://docs.ecall.org/
 
 ---
 
 **Made with ❤️ by the ECall team**
-

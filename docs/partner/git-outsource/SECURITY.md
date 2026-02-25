@@ -17,7 +17,7 @@ We provide security updates for the following versions:
 
 If you discover a security vulnerability, please report it privately:
 
-1. **Email**: security@ecall.example.com
+1. **Email**: support@airfeedkh.com
 2. **Subject**: `[SECURITY] Brief description of vulnerability`
 3. **Include**:
    - Description of the vulnerability
@@ -39,16 +39,16 @@ Please report:
 
 ### Response Timeline
 
-- **Initial Response**: Within 48 hours
-- **Status Update**: Within 7 days
-- **Resolution**: Depends on severity, typically 30-90 days
+-   **Initial Response**: Within 48 hours
+-   **Status Update**: Within 7 days
+-   **Resolution**: Depends on severity, typically 30-90 days
 
 We will:
-1. Acknowledge receipt of your report
-2. Investigate the vulnerability
-3. Work with you to address the issue
-4. Release a fix and security advisory
-5. Credit you (if desired) in the advisory
+1.  Acknowledge receipt of your report. All complaints will be reviewed.
+2.  Investigate the vulnerability
+3.  Work with you to address the issue
+4.  Release a fix and security advisory
+5.  Credit you (if desired) in the advisory
 
 ### Disclosure Policy
 
@@ -64,7 +64,7 @@ We will:
 When contributing code:
 
 1. **Never commit secrets or credentials**
-   - Use environment variables or configuration files
+    - Use `Config.local.xcconfig` (gitignored)
    - Add secrets to `.gitignore`
    - Use secure storage (Keychain) for sensitive data
 
@@ -90,8 +90,8 @@ When contributing code:
 When building custom applications:
 
 1. **Protect API credentials**
-   - Never commit `APP_API_ID` or `APP_API_HASH` to public repos
-   - Use build settings or secure configuration files
+   - Store in `Config.local.xcconfig` (gitignored)
+   - Never commit credentials to public repos
    - Rotate credentials if compromised
 
 2. **Secure distribution**
@@ -166,8 +166,7 @@ We regularly:
 ## Contact
 
 For security-related questions (non-vulnerabilities):
-- **Email**: security@ecall.example.com
+- **Email**: support@airfeedkh.com
 - **Response Time**: Within 5 business days
 
 Thank you for helping keep ECall iOS secure! 🔒
-
