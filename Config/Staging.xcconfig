@@ -1,0 +1,5 @@
+// Staging.xcconfig
+// Includes Pods configuration and optional local secrets override.
+
+#include "../Pods/Target Support Files/Pods-ecall/Pods-ecall.staging.xcconfig"
+#include? "../Config.staging.local.xcconfig"
