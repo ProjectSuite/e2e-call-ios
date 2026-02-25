@@ -25,13 +25,13 @@ final class SSLPinningManager: NSObject, URLSessionDelegate {
     /// Use the debug log output "COPY THIS HASH FOR CERTIFICATE" to extract hashes
     private let stagingPinnedKeys: ServicePinnedKeys = ServicePinnedKeys(
         api: [
-            // "your_staging_api_public_key_sha256_hash_here"
+             "your_staging_api_public_key_sha256_hash_here"
         ],
         socket: [
-            // "your_staging_socket_public_key_sha256_hash_here"
+             "your_staging_socket_public_key_sha256_hash_here"
         ],
         janus: [
-            // "your_staging_janus_public_key_sha256_hash_here"
+             "your_staging_janus_public_key_sha256_hash_here"
         ]
     )
     
