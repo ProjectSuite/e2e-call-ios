@@ -181,6 +181,7 @@ struct SettingsView: View {
                 DeleteAccountView()
                     .environmentObject(appState)
                     .presentationDetents([.large])
+                    .interactiveDismissDisabled(true)
             }
 
             .navigationBarTitleDisplayMode(.inline)

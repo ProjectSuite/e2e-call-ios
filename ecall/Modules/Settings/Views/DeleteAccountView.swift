@@ -8,10 +8,14 @@ struct DeleteAccountView: View {
     @State private var isLoading: Bool = false
     @State private var errorMessage: String = ""
     @State private var showError: Bool = false
+    @State private var showLogoutConfirmation: Bool = false
 
     @FocusState private var isTextFieldFocused: Bool
 
     private let requiredConfirmText = "DELETE"
+
+    /// Optional callback when cancel deletion succeeds (used from login flow)
+    var onCancelDeletionSuccess: (() -> Void)?
 
     /// Whether the account is pending deletion (driven by server `deletedAt`)
     private var isPendingDeletion: Bool {
@@ -40,13 +44,25 @@ struct DeleteAccountView: View {
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
-                    Button(KeyLocalized.cancel) {
-                        dismiss()
+                    // Only show Cancel button when NOT pending deletion
+                    if !isPendingDeletion {
+                        Button(KeyLocalized.cancel) {
+                            dismiss()
+                        }
+                        .disabled(isLoading)
                     }
-                    .disabled(isLoading)
                 }
             }
+            .alert(KeyLocalized.confirm_logout, isPresented: $showLogoutConfirmation) {
+                Button(KeyLocalized.confirm, role: .destructive) {
+                    appState.logout()
+                }
+                Button(KeyLocalized.cancel, role: .cancel) { }
+            } message: {
+                Text(KeyLocalized.logout_confirmation_message)
+            }
         }
+        .interactiveDismissDisabled(true)
     }
 
     // MARK: - State A: Confirmation
@@ -204,6 +220,24 @@ struct DeleteAccountView: View {
             }
             .disabled(isLoading)
             .padding(.horizontal, 24)
+
+            // Logout button
+            Button(action: {
+                showLogoutConfirmation = true
+            }) {
+                HStack {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                    Text(KeyLocalized.logout)
+                }
+                .font(.system(size: 17, weight: .semibold))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 14)
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(14)
+            }
+            .disabled(isLoading)
+            .padding(.horizontal, 24)
             
             Spacer()
         }
@@ -242,7 +276,11 @@ struct DeleteAccountView: View {
                 switch result {
                 case .success:
                     appState.deletedAt = nil
-                    dismiss()
+                    if let onCancelDeletionSuccess {
+                        onCancelDeletionSuccess()
+                    } else {
+                        dismiss()
+                    }
                     ToastManager.shared.success(KeyLocalized.delete_account_cancel_success)
                 case .failure(let error):
                     errorMessage = error.content

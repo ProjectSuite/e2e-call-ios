@@ -116,6 +116,14 @@ struct AuthFlowMainView: View {
             .fullScreenCover(isPresented: $navigateToOtp) {
                 OTPVerificationView(viewModel: viewModel) {}
             }
+            .sheet(isPresented: $viewModel.showPendingDeletionSheet) {
+                DeleteAccountView(onCancelDeletionSuccess: {
+                    viewModel.onCancelDeletionFromLogin()
+                })
+                .environmentObject(appState)
+                .presentationDetents([.large])
+                .interactiveDismissDisabled(true)
+            }
             .task {
                 await appConfig.refresh()
             }

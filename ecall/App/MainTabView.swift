@@ -35,6 +35,8 @@ struct MainTabView: View {
     @State private var showCalleeView = false
     @State private var showCallerView = false
     @State private var selectedTab: Tab = .history
+    @State private var showPendingDeletion = false
+    @State private var hasCheckedDeletionOnLaunch = false
     @ObservedObject private var session = GroupCallSessionManager.shared
 
     var body: some View {
@@ -146,6 +148,14 @@ struct MainTabView: View {
                         .environmentObject(languageManager)
                 }
                 .logViewName()
+                .sheet(isPresented: $showPendingDeletion) {
+                    DeleteAccountView(onCancelDeletionSuccess: {
+                        showPendingDeletion = false
+                    })
+                    .environmentObject(appState)
+                    .presentationDetents([.large])
+                    .interactiveDismissDisabled(true)
+                }
             }
         }
         .onAppear {
@@ -155,6 +165,12 @@ struct MainTabView: View {
                     await appLockManager.checkAndLockIfNeeded()
                 }
             }
+            // Check if deletedAt is already set (API might have returned before view appeared)
+            checkPendingDeletionOnLaunch()
+        }
+        .onChange(of: appState.deletedAt) { _ in
+            // Handle case where API response arrives after view appeared
+            checkPendingDeletionOnLaunch()
         }
         .onChange(of: appState.isRegistered) { isRegistered in
             // If user logs out, ensure app is unlocked
@@ -162,6 +178,14 @@ struct MainTabView: View {
                 appLockManager.clearAppLockSettings()
             }
         }
+    }
+
+    /// Check pending deletion only once on app launch
+    private func checkPendingDeletionOnLaunch() {
+        guard !hasCheckedDeletionOnLaunch else { return }
+        guard appState.deletedAt != nil else { return }
+        hasCheckedDeletionOnLaunch = true
+        showPendingDeletion = true
     }
 }
 

@@ -15,6 +15,7 @@ class AuthViewModel: ObservableObject {
     @Published var showError: Bool = false
     @Published var errorMessage: String = ""
     @Published var type: IdentityType = .email
+    @Published var showPendingDeletionSheet: Bool = false
 
     private let authService = AuthService()
 
@@ -342,7 +343,11 @@ class AuthViewModel: ObservableObject {
         // Route to Main tab via central VM method
         Task { @MainActor in
             AppState.shared.deletedAt = response.deletedAt
-            self.routeToMainTab()
+            if response.deletedAt != nil {
+                self.showPendingDeletionSheet = true
+            } else {
+                self.routeToMainTab()
+            }
         }
     }
 
@@ -366,7 +371,18 @@ class AuthViewModel: ObservableObject {
         debugLog("Login success for user: \(email)")
         Task { @MainActor in
             AppState.shared.deletedAt = response.deletedAt
-            routeToMainTab()
+            if response.deletedAt != nil {
+                self.showPendingDeletionSheet = true
+            } else {
+                routeToMainTab()
+            }
         }
+    }
+
+    /// Called when user successfully cancels account deletion from the login flow sheet
+    @MainActor
+    func onCancelDeletionFromLogin() {
+        showPendingDeletionSheet = false
+        routeToMainTab()
     }
 }
