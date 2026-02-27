@@ -9,7 +9,6 @@ struct SettingsView: View {
     @State private var showQRCodePopup: Bool = false
     @State private var showMyProfile: Bool = false
     @State private var showDeleteAccount: Bool = false
-    @State private var isPendingDeletion: Bool = DeleteAccountView.isPendingDeletionFlag
 
     var body: some View {
         NavigationStack {
@@ -112,7 +111,7 @@ struct SettingsView: View {
                     Button(action: {
                         showDeleteAccount = true
                     }, label: {
-                        if isPendingDeletion {
+                        if appState.deletedAt != nil {
                             HStack(spacing: 12) {
                                 Image(systemName: "exclamationmark.triangle.fill")
                                     .foregroundColor(.orange)
@@ -178,9 +177,7 @@ struct SettingsView: View {
                 MyProfileView()
                     .environmentObject(appState)
             }
-            .sheet(isPresented: $showDeleteAccount, onDismiss: {
-                isPendingDeletion = DeleteAccountView.isPendingDeletionFlag
-            }) {
+            .sheet(isPresented: $showDeleteAccount) {
                 DeleteAccountView()
                     .environmentObject(appState)
                     .presentationDetents([.large])
@@ -188,6 +185,9 @@ struct SettingsView: View {
 
             .navigationBarTitleDisplayMode(.inline)
             .logViewName()
+            .onAppear {
+                appState.fetchCurrentUserInfo()
+            }
         }
         .id(appLockManager.isLocked ? "locked" : "unlocked")
     }

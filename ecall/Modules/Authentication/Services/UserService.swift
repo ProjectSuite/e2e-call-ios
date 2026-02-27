@@ -14,10 +14,15 @@ struct UserInfo: Codable, Hashable {
     var displayName: String
     var email: String
     var phoneNumber: String
+    var deletedAt: Date?
 }
 
 struct UserInfoResponse: Codable {
     var user: UserInfo
+}
+
+struct DeleteAccountResponse: Codable {
+    var deletedAt: Date
 }
 
 class UserService {
@@ -108,7 +113,7 @@ class UserService {
 
     // MARK: - Delete Account
 
-    func deleteAccount() async -> Result<EmptyResponse, APIError> {
+    func deleteAccount() async -> Result<DeleteAccountResponse, APIError> {
         let url = APIEndpoint.deleteAccount.fullURL
         return await APIClient.shared.requestAsync(url, method: .delete)
     }

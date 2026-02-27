@@ -15,6 +15,7 @@ final class AppState: ObservableObject {
     @Published var email: String = ""
     @Published var phoneNumber: String = ""
     @Published var displayName: String = ""
+    @Published var deletedAt: Date? = nil
     /// Pending route determined by notification/deeplink during cold start
     @Published var pendingRoute: PendingRoute?
 
@@ -231,7 +232,7 @@ final class AppState: ObservableObject {
         CredentialsService.shared.fetchCredentials()
     }
 
-    private func fetchCurrentUserInfo() { // reload new user info
+    func fetchCurrentUserInfo() { // reload new user info
         if !isRegistered {return}
 
         UserService.shared.fetchCurrenrUser { response in
@@ -240,6 +241,7 @@ final class AppState: ObservableObject {
                     self.updateDisplayName(user.displayName)
                     self.updateEmail(user.email)
                     self.updatePhoneNumber(user.phoneNumber)
+                    self.deletedAt = user.deletedAt
                 }
             }
         }
@@ -298,6 +300,7 @@ final class AppState: ObservableObject {
         self.email = ""
         self.displayName = ""
         self.userID = ""
+        self.deletedAt = nil
 
         // Clear app lock settings on logout
         AppLockManager.shared.clearAppLockSettings()

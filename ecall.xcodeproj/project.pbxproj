@@ -273,7 +273,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				API_BASE_URL = "https://stg-api.your_app.org";
+				API_BASE_URL = "https://stg-api.ecall.org";
 				APP_API_HASH = your_real_api_hash;
 				APP_API_ID = your_real_api_id;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -373,7 +373,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/ecall/**";
 				INFOPLIST_FILE = ecall/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Ecall;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ecall Stg";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera for video calls and to scan QR codes.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Ecall uses biometric authentication (Face ID, Touch ID, or passcode) to securely access your encrypted calls, protect your private keys, and verify your identity.";
@@ -582,7 +582,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				HEADER_SEARCH_PATHS = "$(PROJECT_DIR)/ecall/**";
 				INFOPLIST_FILE = ecall/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = Ecall;
+				INFOPLIST_KEY_CFBundleDisplayName = "Ecall Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera for video calls and to scan QR codes.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Ecall uses biometric authentication (Face ID, Touch ID, or passcode) to securely access your encrypted calls, protect your private keys, and verify your identity.";

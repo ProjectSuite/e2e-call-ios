@@ -20,6 +20,7 @@ enum APIErrorCode: String {
     case accessTokenExpired = "ErrAccessTokenExpired"      // Access token expired - need refresh
     case expireRefreshToken = "ErrRefreshTokenExpired"     // Refresh token expired - logout
     case terminateSession = "ErrDeviceNotRegistered"         // Session terminated - logout
+    case userNotFound = "ErrUserNotFound"                   // User not found - logout
     case unknown                                           // Unknown error code - Default
     
     init(fromRawValue: String) {
@@ -608,7 +609,7 @@ class APIClient {
     /// Check if error requires logout (not refresh)
     private func shouldLogoutForError(code: APIErrorCode) -> Bool {
         switch code {
-        case .expireRefreshToken, .terminateSession:
+        case .expireRefreshToken, .terminateSession, .userNotFound:
             return true
         case .accessTokenExpired:
             return false // Should refresh instead
@@ -641,6 +642,14 @@ class APIClient {
                 DispatchQueue.main.async { AppState.shared.logout(remotely: false) }
                 return .unauthorized
             }
+
+            // Handle 400 with ErrUserNotFound — kickout like 401
+            if errorCode == .userNotFound {
+                debugLog("❌ ErrUserNotFound detected, logging out...")
+                DispatchQueue.main.async { AppState.shared.logout(remotely: false) }
+                return .userNotFound
+            }
+
             return .service(envelope.error)
         }
 
@@ -706,6 +715,15 @@ class APIClient {
                     return
                 }
                 
+                // Handle ErrUserNotFound on any status code — kickout like 401
+                if let errorCode = self.parseErrorCode(from: data),
+                   errorCode == .userNotFound {
+                    debugLog("❌ ErrUserNotFound detected in raw request, logging out...")
+                    DispatchQueue.main.async { AppState.shared.logout(remotely: false) }
+                    completion(.failure(.userNotFound))
+                    return
+                }
+
                 // Handle 401 - Check error code to decide refresh or logout
                 if httpResponse.statusCode == 401 {
                     // Parse error code to determine action

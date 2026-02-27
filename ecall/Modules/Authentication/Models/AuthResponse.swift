@@ -6,6 +6,7 @@ struct AuthResponse: Decodable {
     let displayName: String?
     let accessToken: String?
     let refreshToken: String?
+    let deletedAt: Date?
     // Complete user fields (merged from completeRegistration)
     let publicKey: String?
 }

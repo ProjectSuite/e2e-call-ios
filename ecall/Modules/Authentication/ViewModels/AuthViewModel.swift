@@ -341,6 +341,7 @@ class AuthViewModel: ObservableObject {
 
         // Route to Main tab via central VM method
         Task { @MainActor in
+            AppState.shared.deletedAt = response.deletedAt
             self.routeToMainTab()
         }
     }
@@ -364,6 +365,7 @@ class AuthViewModel: ObservableObject {
 
         debugLog("Login success for user: \(email)")
         Task { @MainActor in
+            AppState.shared.deletedAt = response.deletedAt
             routeToMainTab()
         }
     }
